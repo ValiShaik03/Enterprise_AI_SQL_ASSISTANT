@@ -36,7 +36,7 @@ def get_all_users():
     """)
 
     users = cursor.fetchall()
-
+    print(users)
     cursor.close()
     conn.close()
 

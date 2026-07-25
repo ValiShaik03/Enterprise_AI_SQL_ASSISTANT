@@ -46,17 +46,17 @@ const items: Item[] = [
   { to: "/history", label: "Query History", icon: History },
 
   {
-    to: "/users",
+    to: "/user-management",
     label: "User Management",
     icon: UsersRound,
-    roles: ["admin", "administrator"],
+    roles: ["manager"],
   },
 
   {
   to: "/registration-requests",
   label: "Registration Requests",
   icon: UserPlus,
-  roles: ["admin", "administrator"],
+  roles: ["manager"],
 },
 
   {

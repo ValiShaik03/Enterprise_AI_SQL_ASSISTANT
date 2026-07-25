@@ -22,6 +22,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RegistrationRequestsRouteImport } from './routes/registration-requests'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as UserManagementRouteImport } from './routes/user-management'
 import { Route as UsersRouteImport } from './routes/users'
 
 const IndexRoute = IndexRouteImport.update({
@@ -89,6 +90,11 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UserManagementRoute = UserManagementRouteImport.update({
+  id: '/user-management',
+  path: '/user-management',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsersRoute = UsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/registration-requests': typeof RegistrationRequestsRoute
   '/settings': typeof SettingsRoute
+  '/user-management': typeof UserManagementRoute
   '/users': typeof UsersRoute
 }
 export interface FileRoutesByTo {
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/registration-requests': typeof RegistrationRequestsRoute
   '/settings': typeof SettingsRoute
+  '/user-management': typeof UserManagementRoute
   '/users': typeof UsersRoute
 }
 export interface FileRoutesById {
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/registration-requests': typeof RegistrationRequestsRoute
   '/settings': typeof SettingsRoute
+  '/user-management': typeof UserManagementRoute
   '/users': typeof UsersRoute
 }
 export interface FileRouteTypes {
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/registration-requests'
     | '/settings'
+    | '/user-management'
     | '/users'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/registration-requests'
     | '/settings'
+    | '/user-management'
     | '/users'
   id:
     | '__root__'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/registration-requests'
     | '/settings'
+    | '/user-management'
     | '/users'
   fileRoutesById: FileRoutesById
 }
@@ -209,6 +221,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   RegistrationRequestsRoute: typeof RegistrationRequestsRoute
   SettingsRoute: typeof SettingsRoute
+  UserManagementRoute: typeof UserManagementRoute
   UsersRoute: typeof UsersRoute
 }
 
@@ -305,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/user-management': {
+      id: '/user-management'
+      path: '/user-management'
+      fullPath: '/user-management'
+      preLoaderRoute: typeof UserManagementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/users': {
       id: '/users'
       path: '/users'
@@ -329,6 +349,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   RegistrationRequestsRoute: RegistrationRequestsRoute,
   SettingsRoute: SettingsRoute,
+  UserManagementRoute: UserManagementRoute,
   UsersRoute: UsersRoute,
 }
 export const routeTree = rootRouteImport
