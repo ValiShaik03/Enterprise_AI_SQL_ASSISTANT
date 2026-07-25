@@ -40,6 +40,7 @@ def get_registration_requests():
 def approve_registration_request(
     request_id: int,
     admin_id: int,
+    role : str,
 ):
 
     conn = get_connection()

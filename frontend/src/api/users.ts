@@ -2,7 +2,7 @@ import { api } from "./axios";
 
 export const usersApi = {
   getUsers: async () => {
-    const response = await api.get("/users");
+    const response = await api.get("/api/admin/users");
     return response.data.users;
   },
 
@@ -14,12 +14,12 @@ export const usersApi = {
       status: string;
     }
   ) => {
-    const response = await api.put(`/users/${id}`, payload);
+    const response = await api.put(`/api/admin/users/${id}`, payload)
     return response.data;
   },
 
   deleteUser: async (id: number) => {
-    const response = await api.delete(`/users/${id}`);
+    const response = await api.delete(`/api/admin/users/${id}`)
     return response.data;
   },
 
@@ -27,10 +27,9 @@ export const usersApi = {
     id: number,
     status: string
   ) => {
-    const response = await api.patch(
-      `/users/${id}/status`,
-      { status }
-    );
+    const response = await api.patch(`/api/admin/users/${id}/status`, {
+  is_active: status === "active",
+});
 
     return response.data;
   },

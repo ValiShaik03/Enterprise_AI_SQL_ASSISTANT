@@ -79,6 +79,13 @@ def create_registration_request(data):
         raise ValueError(
             "A registration request is already pending."
         )
+    
+    allowed_roles = ["Viewer", "Analyst"]
+
+    if data.requested_role not in allowed_roles:
+        raise ValueError(
+            "Invalid role selected."
+        )
 
     password_hash = hash_password(data.password)
 

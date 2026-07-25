@@ -13,9 +13,16 @@ from api.history import router as history_router
 from api.export import router as export_router
 from routes.registration import router as registration_router
 from routes.admin_registration import router as admin_registration_router
+from utils.bootstrap import create_default_admin
+from contextlib import asynccontextmanager
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_default_admin()
+    yield
 app = FastAPI(
     title="AI SQL RAG Assistant",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan,
 )
 
 # -----------------------------------------

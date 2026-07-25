@@ -15,7 +15,6 @@ export function RegisterForm() {
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("Viewer");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -32,7 +31,6 @@ export function RegisterForm() {
 
       setFullName("");
       setEmail("");
-      setRole("Viewer");
       setPassword("");
       setConfirmPassword("");
     },
@@ -81,7 +79,7 @@ export function RegisterForm() {
       email,
       password,
       confirm_password: confirmPassword,
-      requested_role: role,
+      requested_role: "Viewer",
     });
   };
 
@@ -129,7 +127,7 @@ export function RegisterForm() {
     </div>
 
     {/* Requested Role */}
-    <div className="flex flex-col gap-1.5">
+    {/* <div className="flex flex-col gap-1.5">
       <label className="text-xs uppercase tracking-wider text-muted-foreground">
         Requested Role
       </label>
@@ -142,9 +140,8 @@ export function RegisterForm() {
       >
         <option value="Viewer">Viewer</option>
         <option value="Analyst">Analyst</option>
-        <option value="Manager">Manager</option>
       </select>
-    </div>
+    </div> */}
 
     {/* Password */}
     <div className="flex flex-col gap-1.5">
