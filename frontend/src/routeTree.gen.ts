@@ -19,6 +19,8 @@ import { Route as EmployeesRouteImport } from './routes/employees'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as RegistrationRequestsRouteImport } from './routes/registration-requests'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as UsersRouteImport } from './routes/users'
 
@@ -72,6 +74,16 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegistrationRequestsRoute = RegistrationRequestsRouteImport.update({
+  id: '/registration-requests',
+  path: '/registration-requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -94,6 +106,8 @@ export interface FileRoutesByFullPath {
   '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/registration-requests': typeof RegistrationRequestsRoute
   '/settings': typeof SettingsRoute
   '/users': typeof UsersRoute
 }
@@ -108,6 +122,8 @@ export interface FileRoutesByTo {
   '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/registration-requests': typeof RegistrationRequestsRoute
   '/settings': typeof SettingsRoute
   '/users': typeof UsersRoute
 }
@@ -123,6 +139,8 @@ export interface FileRoutesById {
   '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/registration-requests': typeof RegistrationRequestsRoute
   '/settings': typeof SettingsRoute
   '/users': typeof UsersRoute
 }
@@ -139,6 +157,8 @@ export interface FileRouteTypes {
     | '/history'
     | '/login'
     | '/profile'
+    | '/register'
+    | '/registration-requests'
     | '/settings'
     | '/users'
   fileRoutesByTo: FileRoutesByTo
@@ -153,6 +173,8 @@ export interface FileRouteTypes {
     | '/history'
     | '/login'
     | '/profile'
+    | '/register'
+    | '/registration-requests'
     | '/settings'
     | '/users'
   id:
@@ -167,6 +189,8 @@ export interface FileRouteTypes {
     | '/history'
     | '/login'
     | '/profile'
+    | '/register'
+    | '/registration-requests'
     | '/settings'
     | '/users'
   fileRoutesById: FileRoutesById
@@ -182,6 +206,8 @@ export interface RootRouteChildren {
   HistoryRoute: typeof HistoryRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
+  RegisterRoute: typeof RegisterRoute
+  RegistrationRequestsRoute: typeof RegistrationRequestsRoute
   SettingsRoute: typeof SettingsRoute
   UsersRoute: typeof UsersRoute
 }
@@ -258,6 +284,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/registration-requests': {
+      id: '/registration-requests'
+      path: '/registration-requests'
+      fullPath: '/registration-requests'
+      preLoaderRoute: typeof RegistrationRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -286,6 +326,8 @@ const rootRouteChildren: RootRouteChildren = {
   HistoryRoute: HistoryRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
+  RegisterRoute: RegisterRoute,
+  RegistrationRequestsRoute: RegistrationRequestsRoute,
   SettingsRoute: SettingsRoute,
   UsersRoute: UsersRoute,
 }

@@ -11,6 +11,8 @@ from utils.roles import require_analyst,require_viewer
 from api.admin import router as admin_router
 from api.history import router as history_router
 from api.export import router as export_router
+from routes.registration import router as registration_router
+from routes.admin_registration import router as admin_registration_router
 app = FastAPI(
     title="AI SQL RAG Assistant",
     version="1.0.0"
@@ -40,6 +42,8 @@ app.include_router(admin_router)
 app.include_router(audit_router)
 app.include_router(history_router)
 app.include_router(export_router)
+app.include_router(registration_router)
+app.include_router(admin_registration_router)
 
 # -----------------------------------------
 # Home

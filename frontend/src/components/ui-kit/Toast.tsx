@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 import { CheckCircle2, AlertCircle, X } from "lucide-react";
+import { useToast } from "@/components/ui-kit/Toast";
 
 type Toast = { id: number; message: string; type: "success" | "error" | "info" };
 const Ctx = createContext<{ push: (t: Omit<Toast, "id">) => void } | null>(null);

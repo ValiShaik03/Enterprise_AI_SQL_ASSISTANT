@@ -11,6 +11,7 @@ import {
   History,
   UserCircle,
   UsersRound,
+  UserPlus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
@@ -50,6 +51,13 @@ const items: Item[] = [
     icon: UsersRound,
     roles: ["admin", "administrator"],
   },
+
+  {
+  to: "/registration-requests",
+  label: "Registration Requests",
+  icon: UserPlus,
+  roles: ["admin", "administrator"],
+},
 
   {
     to: "/audit",
