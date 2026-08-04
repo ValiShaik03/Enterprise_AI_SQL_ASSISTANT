@@ -228,7 +228,7 @@ Enterprise_AI_SQL_ASSISTANT/
 ## Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/Enterprise_AI_SQL_ASSISTANT.git
+git clone https://github.com/ValiShaik03/Enterprise_AI_SQL_ASSISTANT.git
 
 cd Enterprise_AI_SQL_ASSISTANT
 ```
@@ -335,7 +335,7 @@ Deploy to:
 **Shaik Mahaboob Vali**
 
 - GitHub: https://github.com/ValiShaik03
-- LinkedIn: *(Add your LinkedIn URL)*
+- LinkedIn: https://linkedin.com/in/mahaboobvalishaik/
 
 ---
 
