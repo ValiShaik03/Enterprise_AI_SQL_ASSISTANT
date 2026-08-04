@@ -1,4 +1,9 @@
-import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch,
+  Link,
+} from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Eye, EyeOff, Loader2, Lock, Mail, Sparkles } from "lucide-react";
@@ -153,18 +158,28 @@ function LoginPage() {
           )}
 
           <Button type="submit" className="mt-1 h-11" disabled={mutation.isPending}>
-            {mutation.isPending ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Signing in…
-              </>
-            ) : (
-              "Sign in"
-            )}
-          </Button>
+              {mutation.isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Signing in…
+                </>
+              ) : (
+                "Sign in"
+              )}
+            </Button>
 
-          <p className="text-[11px] text-center text-muted-foreground mt-1">
-            Protected area. Your session is authenticated with JWT.
-          </p>
+            <div className="mt-3 text-center text-sm text-muted-foreground">
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                className="text-primary font-semibold hover:underline"
+              >
+                Register here
+              </Link>
+            </div>
+
+            <p className="text-[11px] text-center text-muted-foreground mt-1">
+              Protected area. Your session is authenticated with JWT.
+            </p>
         </form>
       </div>
     </div>
