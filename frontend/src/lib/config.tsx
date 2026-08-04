@@ -1,7 +1,7 @@
 const KEY_BASE_URL = "ai_sql_base_url";
 const KEY_THEME = "ai_sql_theme";
 
-export const DEFAULT_BASE_URL = "https://ai-sql-rag-ek3b.onrender.com";
+export const DEFAULT_BASE_URL = "http://127.0.0.1:8000";
 
 export function getBaseUrl(): string {
   if (typeof window === "undefined") return DEFAULT_BASE_URL;

@@ -1,6 +1,9 @@
+import traceback
 from fastapi import APIRouter, Depends, HTTPException
 
 from utils.roles import require_admin
+
+from models.registration_request import ApproveRegistrationRequest
 
 from services.admin_registration_service import (
     get_registration_requests,
@@ -31,17 +34,16 @@ def registration_requests(
 @router.post("/{request_id}/approve")
 def approve_request(
     request_id: int,
+    data: ApproveRegistrationRequest,
     current_user=Depends(require_admin),
 ):
 
     try:
 
         return approve_registration_request(
-
             request_id,
-
-            current_user["user_id"]
-
+            current_user["user_id"],
+            data.role,
         )
 
     except ValueError as e:
@@ -54,14 +56,14 @@ def approve_request(
 
         )
 
-    except Exception:
+    
+
+    except Exception as e:
+        traceback.print_exc()
 
         raise HTTPException(
-
             status_code=500,
-
-            detail="Internal Server Error"
-
+            detail=str(e)
         )
 
 # ---------------------------------------------------------

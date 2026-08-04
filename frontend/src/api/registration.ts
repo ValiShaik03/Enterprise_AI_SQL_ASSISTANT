@@ -12,21 +12,33 @@ export const registrationApi = {
   // --------------------------------------------
   // Approve Registration
   // --------------------------------------------
-  approveRequest: async (requestId: number) => {
-    const response = await api.post(
-      `/registration-requests/${requestId}/approve`
-    );
+  approveRequest: async (payload: {
+  requestId: number;
+  role: string;
+}) => {
+  console.log("APPROVE PAYLOAD:", payload);
+  console.log("requestId:", payload.requestId);
+  console.log("role:", payload.role);
 
-    return response.data;
-  },
+  const response = await api.post(
+    `/registration-requests/${payload.requestId}/approve`,
+    {
+      role: payload.role,
+    }
+  );
 
+  return response.data;
+},
   // --------------------------------------------
   // Reject Registration
   // --------------------------------------------
-  rejectRequest: async (
-    requestId: number,
-    reason: string
-  ) => {
+  rejectRequest: async ({
+  requestId,
+  reason,
+}: {
+  requestId: number;
+  reason: string;
+}) => {
     const response = await api.post(
       `/registration-requests/${requestId}/reject`,
       {

@@ -83,30 +83,45 @@ function RootComponent() {
 }
 
 function AppLayout() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const pathname = useRouterState({
+    select: (s) => s.location.pathname,
+  });
+
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const isLogin = pathname.startsWith("/login");
+
+  const isPublicRoute =
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/register");
 
   useEffect(() => {
-    if (!isLogin && !isAuthenticated) {
+    if (!isPublicRoute && !isAuthenticated) {
       navigate({
         to: "/login",
-        search: { redirect: pathname === "/login" ? undefined : pathname },
+        search: {
+          redirect: pathname === "/login" ? undefined : pathname,
+        },
       });
     }
-  }, [isLogin, isAuthenticated, pathname, navigate]);
+  }, [isPublicRoute, isAuthenticated, pathname, navigate]);
 
-  if (isLogin) return <Outlet />;
+  // Public pages don't use the dashboard layout
+  if (isPublicRoute) {
+    return <Outlet />;
+  }
 
-  // Guard render: avoid flashing protected UI while the redirect above runs.
-  if (!isAuthenticated) return null;
+  // Avoid flashing protected UI
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="flex min-h-screen">
       <Sidebar />
+
       <div className="flex-1 flex flex-col min-w-0">
         <Navbar />
+
         <main className="flex-1 p-4 lg:p-8">
           <Outlet />
         </main>

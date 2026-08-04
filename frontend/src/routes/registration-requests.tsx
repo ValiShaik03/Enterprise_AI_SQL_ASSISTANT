@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ApproveDialog } from "@/components/registration/ApproveDialog";
 import { Button } from "@/components/ui/button";
 import { Search, RefreshCw } from "lucide-react";
 import type { RegistrationRequest } from "@/types/registration";
@@ -33,6 +34,7 @@ function RegistrationRequestsPage() {
 
   const [rejectOpen, setRejectOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<number | null>(null);
+  const [approveOpen, setApproveOpen] = useState(false);
 
   const {
   data,
@@ -45,33 +47,42 @@ function RegistrationRequestsPage() {
   });
 
   const approveMutation = useMutation({
-    mutationFn: registrationApi.approveRequest,
-    onSuccess: () => {
+  mutationFn: registrationApi.approveRequest,
+
+  onSuccess: () => {
     queryClient.invalidateQueries({
-        queryKey: ["registration-requests"],
+      queryKey: ["registration-requests"],
     });
 
+    setApproveOpen(false);
+    setSelectedRequest(null);
+
     toast({
-    type: "success",
-    message: "Registration approved successfully.",
-});
-},
-    onError: (error) => {
-      toast({
-        type: "error",
-        message: extractApiError(error),
+      type: "success",
+      message: "Registration approved successfully.",
     });
-},
-  });
+  },
+
+  onError: (error) => {
+    toast({
+      type: "error",
+      message: extractApiError(error),
+    });
+  },
+});
 
   const rejectMutation = useMutation({
     mutationFn: ({
-      id,
-      reason,
-    }: {
-      id: number;
-      reason: string;
-    }) => registrationApi.rejectRequest(id, reason),
+  id,
+  reason,
+}: {
+  id: number;
+  reason: string;
+}) =>
+  registrationApi.rejectRequest({
+    requestId: id,
+    reason,
+  }),
 
     onSuccess: () => {
     queryClient.invalidateQueries({
@@ -182,13 +193,33 @@ function RegistrationRequestsPage() {
           requests={requests}
           approving={approveMutation.isPending}
           rejecting={rejectMutation.isPending}
-          onApprove={(id) => approveMutation.mutate(id)}
+          onApprove={(id) => {
+            setSelectedRequest(id);
+            setApproveOpen(true);
+          }}
           onReject={(id) => {
             setSelectedRequest(id);
             setRejectOpen(true);
           }}
         />
       </Card>
+      
+      <ApproveDialog
+        open={approveOpen}
+        loading={approveMutation.isPending}
+        onClose={() => {
+          setApproveOpen(false);
+          setSelectedRequest(null);
+        }}
+        onApprove={(role) => {
+          if (selectedRequest) {
+            approveMutation.mutate({
+              requestId: selectedRequest,
+              role,
+            });
+          }
+        }}
+      />
 
       <RejectDialog
         open={rejectOpen}

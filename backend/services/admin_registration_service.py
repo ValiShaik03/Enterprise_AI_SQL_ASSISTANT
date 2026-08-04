@@ -1,5 +1,9 @@
-from services.db_service import get_connection
 from datetime import datetime
+
+from services.db_service import get_connection
+from services.notification_service import create_notification
+from utils.email_service import send_email
+
 
 # ---------------------------------------------------------
 # Get All Registration Requests
@@ -12,16 +16,13 @@ def get_registration_requests():
     cursor.execute(
         """
         SELECT
-
             request_id,
             full_name,
             email,
             requested_role,
             status,
             created_at
-
         FROM registration_requests
-
         ORDER BY created_at DESC
         """
     )
@@ -40,7 +41,7 @@ def get_registration_requests():
 def approve_registration_request(
     request_id: int,
     admin_id: int,
-    role : str,
+    role: str,
 ):
 
     conn = get_connection()
@@ -49,7 +50,7 @@ def approve_registration_request(
     try:
 
         # ------------------------------------
-        # Fetch Request
+        # Fetch Registration Request
         # ------------------------------------
         cursor.execute(
             """
@@ -57,7 +58,7 @@ def approve_registration_request(
             FROM registration_requests
             WHERE request_id=%s
             """,
-            (request_id,)
+            (request_id,),
         )
 
         request = cursor.fetchone()
@@ -68,6 +69,15 @@ def approve_registration_request(
         if request["status"] != "Pending":
             raise ValueError("Request has already been processed.")
 
+        allowed_roles = [
+            "Viewer",
+            "Analyst",
+            "Manager",
+        ]
+
+        if role not in allowed_roles:
+            raise ValueError("Invalid role selected.")
+
         # ------------------------------------
         # Check Existing User
         # ------------------------------------
@@ -77,7 +87,7 @@ def approve_registration_request(
             FROM users
             WHERE email=%s
             """,
-            (request["email"],)
+            (request["email"],),
         )
 
         existing = cursor.fetchone()
@@ -109,9 +119,11 @@ def approve_registration_request(
                 request["full_name"],
                 request["email"],
                 request["password_hash"],
-                request["requested_role"],
-            )
+                role,
+            ),
         )
+
+        new_user_id = cursor.lastrowid
 
         # ------------------------------------
         # Update Registration Request
@@ -120,42 +132,72 @@ def approve_registration_request(
             """
             UPDATE registration_requests
             SET
-
                 status='Approved',
-
                 approved_by=%s,
-
                 approved_at=%s
-
             WHERE request_id=%s
             """,
             (
                 admin_id,
                 datetime.now(),
                 request_id,
-            )
+            ),
+        )
+
+        # ------------------------------------
+        # Create Notification
+        # ------------------------------------
+        create_notification(
+            cursor=cursor,
+            user_id=new_user_id,
+            title="Registration Approved",
+            message=f"Your account has been approved. Assigned role: {role}. You can now log in.",
+            notification_type="Approval",
         )
 
         conn.commit()
 
+        # ------------------------------------
+        # Send Email (Don't Fail Approval)
+        # ------------------------------------
+        try:
+
+            send_email(
+                to_email=request["email"],
+                subject="Registration Approved",
+                body=f"""Hello {request["full_name"]},
+
+Congratulations!
+
+Your registration request has been approved.
+
+Assigned Role:
+{role}
+
+You can now login to SQL RAG Assistant.
+
+Regards,
+SQL RAG Assistant Team
+""",
+            )
+
+        except Exception as email_error:
+
+            print("Approval email failed:", email_error)
+
         return {
-
             "success": True,
-
-            "message": "Registration approved successfully."
-
+            "message": "Registration approved successfully.",
         }
 
     except Exception:
 
         conn.rollback()
-
         raise
 
     finally:
 
         cursor.close()
-
         conn.close()
 
 
@@ -179,7 +221,7 @@ def reject_registration_request(
             FROM registration_requests
             WHERE request_id=%s
             """,
-            (request_id,)
+            (request_id,),
         )
 
         request = cursor.fetchone()
@@ -205,20 +247,48 @@ def reject_registration_request(
                 admin_id,
                 datetime.now(),
                 request_id,
-            )
+            ),
         )
 
         conn.commit()
 
+        # ------------------------------------
+        # Send Rejection Email
+        # ------------------------------------
+        try:
+
+            send_email(
+                to_email=request["email"],
+                subject="Registration Rejected",
+                body=f"""Hello {request["full_name"]},
+
+Your registration request has been been rejected.
+
+Reason:
+{reason}
+
+If you believe this is a mistake, please contact the administrator.
+
+Regards,
+SQL RAG Assistant Team
+""",
+            )
+
+        except Exception as email_error:
+
+            print("Rejection email failed:", email_error)
+
         return {
             "success": True,
-            "message": "Registration rejected successfully."
+            "message": "Registration rejected successfully.",
         }
 
     except Exception:
+
         conn.rollback()
         raise
 
     finally:
+
         cursor.close()
         conn.close()

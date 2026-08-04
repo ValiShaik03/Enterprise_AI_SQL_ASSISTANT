@@ -2,6 +2,7 @@ import bcrypt
 
 from services.db_service import get_connection
 
+from services.notification_service import create_notification
 
 # ---------------------------------------------------------
 # Check if email already exists in users table
@@ -121,10 +122,21 @@ def create_registration_request(data):
 
     conn.commit()
 
+# ---------------------------------------------------------
+# Notify Administrator
+# ---------------------------------------------------------
+    create_notification(
+        cursor,
+        user_id=1,
+        title="New Registration Request",
+        message=f"{data.full_name} requested {data.requested_role} access.",
+        notification_type="Registration",
+    )
+
     cursor.close()
     conn.close()
 
     return {
-        "success": True,
-        "message": "Registration request submitted successfully. Please wait for admin approval."
-    }
+    "success": True,
+    "message": "Registration request submitted successfully. Please wait for admin approval."
+}

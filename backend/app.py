@@ -15,6 +15,9 @@ from routes.registration import router as registration_router
 from routes.admin_registration import router as admin_registration_router
 from utils.bootstrap import create_default_admin
 from contextlib import asynccontextmanager
+from routes.notifications import router as notification_router
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     create_default_admin()
@@ -51,6 +54,7 @@ app.include_router(history_router)
 app.include_router(export_router)
 app.include_router(registration_router)
 app.include_router(admin_registration_router)
+app.include_router(notification_router)
 
 # -----------------------------------------
 # Home

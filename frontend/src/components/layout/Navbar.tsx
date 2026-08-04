@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { clearAuth, getUser, userDisplayName, userInitials } from "@/lib/auth";
 import { useToast } from "@/components/ui-kit/Toast";
+import { NotificationBell } from "./NotificationBell";
 
 const mobileItems = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -125,6 +126,8 @@ export function Navbar() {
               <Moon className="h-4 w-4" />
             )}
           </button>
+
+          <NotificationBell />
 
           {/* Profile menu */}
           <div className="relative" ref={menuRef}>
